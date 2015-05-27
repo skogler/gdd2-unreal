@@ -17,6 +17,8 @@ ANetworkActor::ANetworkActor() :
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+
+
 ANetworkActor::~ANetworkActor()
 {
 	if(Connection != nullptr)
