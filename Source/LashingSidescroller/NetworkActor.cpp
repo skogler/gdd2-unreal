@@ -127,7 +127,7 @@ void ANetworkActor::TCPSocketListener()
 
 	FVector Euler = FVector(FMath::RadiansToDegrees(angles[length - 3]), FMath::RadiansToDegrees(angles[length - 2]), FMath::RadiansToDegrees(angles[length - 1]));
 
-	Rotator = FRotator(Euler.Y, Euler.X, -Euler.Z);
+	Rotator = FRotator(-Euler.Y, Euler.X, -Euler.Z);
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Data Bytes Read ~> %d - %f %f %f"), length, Euler.X, Euler.Y, Euler.Z));
 }
