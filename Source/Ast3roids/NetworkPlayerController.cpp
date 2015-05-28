@@ -129,11 +129,18 @@ void ANetworkPlayerController::TCPSocketListener()
 
 	const float* angles = reinterpret_cast<const float*>(ReceivedData.GetData());
 
-	FVector Euler = FVector(FMath::RadiansToDegrees(angles[length - 3]), FMath::RadiansToDegrees(angles[length - 2]), FMath::RadiansToDegrees(angles[length - 1]));
+	float pitch = -FMath::RadiansToDegrees(angles[length - 2]);
+	float yaw = FMath::RadiansToDegrees(angles[length - 3]);
+	float roll = -FMath::RadiansToDegrees(angles[length - 1]);
 
-	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f %f %f"), Euler.Y, Euler.X, Euler.Z));
-	SetControlRotation(FRotator(-Euler.Y, Euler.X, Euler.Z));
+	FQuat Pitch = FQuat(FRotator(pitch, 0, 0));
+	FQuat Yaw = FQuat(FRotator(0, yaw, 0));
+	FQuat Roll = FQuat(FRotator(0, 0, roll));
+	
+	FQuat Rotation = Yaw * Pitch * Roll;
 
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f %f %f"), pitch, yaw, roll));
+	SetControlRotation(FRotator(Rotation));
 }
 
 
