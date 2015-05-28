@@ -3,8 +3,8 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "Networking.h"
 #include "NetworkPlayerController.generated.h"
-
 
 UCLASS()
 class AST3ROIDS_API ANetworkPlayerController : public APlayerController
@@ -36,6 +36,4 @@ private:
 	FSocket* Socket;
 	FSocket* Connection;
 	TSharedPtr<FInternetAddr> RemoteAddress;
-	
-	
 };
