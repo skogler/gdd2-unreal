@@ -26,12 +26,6 @@ public:
 	void TCPConnectionListener();
 	void TCPSocketListener();
 
-	//UFUNCTION(BlueprintCallable, Category = "Pawn")
-	virtual FRotator GetControlRotation() const override;
-
-	UPROPERTY(BlueprintReadOnly, Transient, Category = "Transformation")
-		FRotator InputRotator;
-
 private:
 	FSocket* Socket;
 	FSocket* Connection;

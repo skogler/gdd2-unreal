@@ -61,9 +61,9 @@ void ANetworkPlayerController::BeginPlay()
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Connection ~> %d"), Socket != nullptr));
 
-	FTimerHandle timer_handle;
-	GetWorldTimerManager().SetTimer(timer_handle, this,
-		&ANetworkPlayerController::TCPConnectionListener, 0.01f, true, 0.0f);//*/
+	GetWorldTimerManager().SetTimer(this,
+		&ANetworkPlayerController::TCPConnectionListener, 0.01f, true);//*/
+	
 }
 
 // Called every frame
@@ -74,6 +74,8 @@ void ANetworkPlayerController::Tick(float DeltaTime)
 
 void ANetworkPlayerController::TCPConnectionListener()
 {
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("got conn")));
 	if (!Socket) return;
 
 	//Remote address
@@ -83,6 +85,8 @@ void ANetworkPlayerController::TCPConnectionListener()
 	// handle incoming connections
 	if (Socket->HasPendingConnection(Pending) && Pending)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("has pending")));
+
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//Already have a Connection? destroy previous
 		if (Connection)
@@ -94,13 +98,17 @@ void ANetworkPlayerController::TCPConnectionListener()
 
 		//New Connection receive!
 		Connection = Socket->Accept(*RemoteAddress, TEXT("connection"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("accept")));
+
 
 		if (Connection != NULL)
 		{
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("not null")));
+
 			//can thread this too
-			FTimerHandle time_handler;
-			GetWorldTimerManager().SetTimer(time_handler, this,
-				&ANetworkPlayerController::TCPSocketListener, 0.01, true, 0.0f);
+			GetWorldTimerManager().SetTimer(this,
+				&ANetworkPlayerController::TCPSocketListener, 0.01, true);
 		}
 	}
 }
@@ -132,14 +140,9 @@ void ANetworkPlayerController::TCPSocketListener()
 
 	FVector Euler = FVector(FMath::RadiansToDegrees(angles[length - 3]), FMath::RadiansToDegrees(angles[length - 2]), FMath::RadiansToDegrees(angles[length - 1]));
 
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f %f %f"), Euler.Y, Euler.X, Euler.Z));
+	SetControlRotation(FRotator(-Euler.Y, Euler.X, -Euler.Z));
 
-	InputRotator = FRotator(-Euler.Y, Euler.X, -Euler.Z);
-
-}
-
-FRotator ANetworkPlayerController::GetControlRotation() const
-{
-	return InputRotator;
 }
 
 
