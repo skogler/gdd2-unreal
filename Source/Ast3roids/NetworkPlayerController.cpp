@@ -74,8 +74,6 @@ void ANetworkPlayerController::Tick(float DeltaTime)
 
 void ANetworkPlayerController::TCPConnectionListener()
 {
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("got conn")));
 	if (!Socket) return;
 
 	//Remote address
@@ -85,8 +83,6 @@ void ANetworkPlayerController::TCPConnectionListener()
 	// handle incoming connections
 	if (Socket->HasPendingConnection(Pending) && Pending)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("has pending")));
-
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//Already have a Connection? destroy previous
 		if (Connection)
@@ -98,14 +94,9 @@ void ANetworkPlayerController::TCPConnectionListener()
 
 		//New Connection receive!
 		Connection = Socket->Accept(*RemoteAddress, TEXT("connection"));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("accept")));
-
 
 		if (Connection != NULL)
 		{
-
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("not null")));
-
 			//can thread this too
 			GetWorldTimerManager().SetTimer(this,
 				&ANetworkPlayerController::TCPSocketListener, 0.01, true);
@@ -141,7 +132,7 @@ void ANetworkPlayerController::TCPSocketListener()
 	FVector Euler = FVector(FMath::RadiansToDegrees(angles[length - 3]), FMath::RadiansToDegrees(angles[length - 2]), FMath::RadiansToDegrees(angles[length - 1]));
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f %f %f"), Euler.Y, Euler.X, Euler.Z));
-	SetControlRotation(FRotator(-Euler.Y, Euler.X, -Euler.Z));
+	SetControlRotation(FRotator(-Euler.Y, Euler.X, Euler.Z));
 
 }
 
